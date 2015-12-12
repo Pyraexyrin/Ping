@@ -14,13 +14,12 @@ public abstract class PingItemAbstract implements PingItem {
 	// CONSTRUCTEURS //
 	///////////////////
 	
-	public PingItemAbstract(int owner){
-		assert((owner >= 0) && (owner < 4));
+	public PingItemAbstract(int owner, int x, int y, int dx, int dy){
 		this.owner = owner;
-		switch(owner){
-		case 0:
-			//
-		}
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
 	}
 	
 	////////////////
@@ -85,7 +84,6 @@ public abstract class PingItemAbstract implements PingItem {
 	//////////////
 	// METHODES //
 	//////////////
-	
 	
 	
 }

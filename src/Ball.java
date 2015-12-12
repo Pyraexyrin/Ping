@@ -1,12 +1,10 @@
 
 public class Ball extends PingItemAbstract {
 
-	public Ball(int owner){
-		super(owner);
-		this.x = Pong.getPongSizeX()/2;
-		this.y = Pong.getPongSizeY()/2;
-		this.dx = 2;
-		this.dy = 2;
+	public static int BALL_SPEED = 2;
+	
+	public Ball(int owner, int x, int y, int dx, int dy){
+		super(owner, x, y, dx, dy);
 	}
 	
 	public void setHeight(int height){
