@@ -26,7 +26,7 @@ public class Pong extends JPanel implements KeyListener {
 	 * Constant (c.f. final) common to all Pong instances (c.f. static)
 	 * defining the background color of the Pong
 	 */
-	private static final Color backgroundColor = new Color(0x99ccff);
+	private static Color backgroundColor = new Color(0x99ccff);
 
 	/**
 	 * Width of pong area
@@ -39,7 +39,7 @@ public class Pong extends JPanel implements KeyListener {
 	/**
 	 * Time step of the simulation (in ms)
 	 */
-	public static final int timestep = 10;
+	public static final int timestep = 20;
 
 	/**
 	 * Pixel data buffer for the Pong rendering
@@ -197,20 +197,73 @@ public class Pong extends JPanel implements KeyListener {
 		g.drawImage(buffer, 0, 0, this);
 	}
 
-	public void checkIntersection(Paddle P, Ball B){
-		int leftSide = B.getX() + B.getWidth() - P.getX();
-		int rightSide = P.getX() + P.getWidth() - B.getX();
-		int upSide = B.getY() + B.getHeight() - P.getY();
-		int downSide = P.getY() + P.getHeight() - B.getY();
+	public boolean checkIntersection(Paddle P, Ball B){
 		
-		if ((leftSide >= 0) && (rightSide >= 0) && (upSide >= 0) && (downSide >= 0)){
-			if ((leftSide < upSide && leftSide < downSide)
-					|| (rightSide < upSide && rightSide < downSide))
-				B.setDX(-B.getDX());
-			else
-				B.setDY(-B.getDY());
-				
+		int Bx = B.getX();
+		int By = B.getY();
+		int Bh = B.getHeight();
+		int Bw = B.getWidth();
+		
+		int Px = P.getX();
+		int Py = P.getY();
+		int Ph = P.getHeight();
+		int Pw = P.getWidth();
+		
+		int v1 = (Bx) - (Px + Pw);
+		int v2 = (Bx + Bw) - (Px);
+		int v3 = (By + Bh) - (Py);
+		int v4 = (By) - (Py + Ph);
+		
+		boolean b = true;
+		
+		if ((v1*v2 < 0) && (v3*v4 < 0)){
+			// Il y a collision
+			// ATTENTION ! x et y ne sont pas dans le sens habituel :
+			// ---------> x
+			// ||
+			// ||
+			// \/ y
+			
+			// Vecteur MILIEU_paddle -> MILIEU_balle
+			int x2 = (Bx + Bh/2) - (Px + Ph/2);
+			int y2 = (By + Bw/2) - (Py + Pw/2);
+			
+			// Cas particulier d'un vecteur vertical, ou nul
+			if (x2 == 0)
+				b = false;
+			
+			// S'il n'est pas vertical ou nul, on calcule les coefficients directeurs de deux vecteurs :
+			// Le précédent (x2, y2), et la diagonale de la raquette.
+			if (b){
+				int c1 = Pw / Ph;
+				int c2 = y2 / x2;
+				b = ((-c1 < c2) && (c2 < c1));
+			}
+			
+			// En les comparant, on connaît de quel côté arrive la balle
+			if (b){
+				// La balle arrive des côtés
+				if (x2 > 0){
+					B.setDX( Math.abs(B.getDX()) );
+				}
+				else {
+					B.setDX( - Math.abs(B.getDX()) );
+				}
+			}
+			else {
+				// La balle arrive du haut ou du bas
+				if (y2 > 0){
+					B.setDY( Math.abs(B.getDY()) );
+				}
+				else {
+					B.setDY( - Math.abs(B.getDY()) );
+				}
+			}
+			
+			b = false ;
 		}
+		
+		return !b;
 	}
 
 	/**

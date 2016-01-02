@@ -7,8 +7,8 @@ public abstract class PingItemAbstract implements PingItem {
 	protected int dy;		// Vecteur de déplacement vertical
 	protected int owner;	// ID du joueur propriétaire
 	
-	protected int height;	// Hauteur de l'item
-	protected int width;	// Largeur de l'item
+	protected int height;	// Hauteur de l'item selon y
+	protected int width;	// Largeur de l'item selon x
 	
 	///////////////////
 	// CONSTRUCTEURS //
